@@ -39,14 +39,34 @@ public class SearchWishlist extends HttpServlet {
      void search(String keyword, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        String title = "Database Result";
+        String title = "Wishlist";
         String docType = "<!doctype html public \"-//w3c//dtd html 4.0 " + //
               "transitional//en\">\n"; //
         out.println(docType + //
               "<html>\n" + //
-              "<head><title>" + title + "</title></head>\n" + //
-              "<body bgcolor=\"#f0f0f0\">\n" + //
-              "<h1 align=\"center\">" + title + "</h1>\n");
+              "<head>\n"
+              + "<style>\n"
+              + "table, th, td {\n"
+              + "border: 1px solid black;\n"
+              + "border-collapse: collapse;\n}"
+              + "header {\n" + 
+              "    background-color:black;\n" + 
+              "    color:white;\n" + 
+              "    text-align:center;\n" + 
+              "    padding:5px;\n" + 
+              "}"
+              + "</style>\n"
+              + "<header>\n" + 
+              "	<h1>" + title + "</h1>\n" + 
+              "</header>"
+              + "<title>" + title + "</title></head><br>\n" + //
+              "<body>\n" + //
+              "<table style=\"width:100%\">\n" + 
+              		"<tr style=\"background-color: #f0f0f0\">\n" + 
+              		"<th>Title</th>\n" + 
+              		"<th>Author</th>\n" + 
+              		"<th>Genre</th>\n" + 
+              		"</tr>");
 
         Connection connection = null;
         PreparedStatement preparedStatement = null;
@@ -58,10 +78,10 @@ public class SearchWishlist extends HttpServlet {
               String selectSQL = "SELECT * FROM wishlist";
               preparedStatement = connection.prepareStatement(selectSQL);
            } else {
-              String selectSQL = "SELECT * FROM wishlist WHERE MYUSER LIKE ?";
-              String theUserName = keyword + "%";
+              String selectSQL = "SELECT * FROM wishlist WHERE TITLE LIKE ?";
+              String theTitle = keyword + "%";
               preparedStatement = connection.prepareStatement(selectSQL);
-              preparedStatement.setString(1, theUserName);
+              preparedStatement.setString(1, theTitle);
            }
            ResultSet rs = preparedStatement.executeQuery();
 
@@ -72,11 +92,14 @@ public class SearchWishlist extends HttpServlet {
               String genre = rs.getString("genre").trim();
 
               if (keyword.isEmpty() || bookTitle.contains(keyword)) {
-                 out.println("Title: " + bookTitle + ", ");
-                 out.println("Author: " + author + ", ");
-                 out.println("Phone: " + genre + "<br>");
+            	  out.println("<tr>\r\n" + 
+              	 		"    <td>"+ bookTitle + "</td>\n" + 
+              	 		"    <td>"+ author + "</td>\n" + 
+              	 		"    <td>" + genre + "</td>\n" + 
+              	 		"  </tr>");
               }
            }
+           out.println("</table>");
            out.println("<a href=\\Tech-Exercise-Bailey\\selectList.html>Select List</a> <br>");
            out.println("</body></html>");
            rs.close();
