@@ -99,9 +99,7 @@ public class RemoveWishlist extends HttpServlet {
 	            				"  </tr>");
 	            		}
 	            	}
-	              	out.println("</table>");
-	              	out.println("<a href=\\Tech-Exercise-Bailey\\selectList.html>Select List</a> <br>");
-	              	out.println("</body></html>");
+
 	              	rs.close();
 	              	preparedStatement.close();
 	              	
